@@ -52,4 +52,98 @@ library(haven)
 pulse_data = read_sas("./data/public_pulse_data.sas7bdat")
 head(pulse_data, 5)
 ```
+library(tidyverse)
+
+```{r}
+litters_data = read_csv("./data/FAS_litters.csv",
+  col_types = "ccddiiii")
+litters_data = janitor::clean_names(litters_data)
+
+pups_data = read_csv("./data/FAS_pups.csv",
+  col_types = "ciiiii")
+pups_data = janitor::clean_names(pups_data)
+```
+
+```{r}
+select(litters_data, group, litter_number, gd0_weight, pups_born_alive)
+
+```
+
+```{r}
+select(litters_data, group:gd_of_birth)
+```
+
+```{r}
+select(litters_data,litter_number, gd0_weight:pups_born_alive)
+```
+
+*Can make a new data frame by doing this :*
+
+```{r}
+litters_selected=select(litters_data,litter_number, gd0_weight:pups_born_alive)
+```
+
+*can rename vars*
+```{r}
+select(litters_data, GROUP=group, litter_number)
+```
+
+*or rename function*
+```{r}
+rename(litters_data,GROUP=group)
+```
+
+
+## Filtering
+
+
+```{r}
+# == is logical question - is the value equal to that thing - keep rows if this is true
+filter(litters_data, group == "Mod8")
+
+filter(litters_data, gd_of_birth == 20)
+
+filter(litters_data, gd_of_birth < 20)
+
+filter(litters_data, pups_born_alive < 6, gd_of_birth < 20)
+
+#| is the or function
+filter(litters_data, group == "Con7" | group =="Mod8")
+
+filter(litters_data, gpups_born_alive >=4, pups_born_alive <=6)
+
+# filter missing
+drop_na(litters_data, gd0_weight)
+```
+
+
+## Mutate
+
+
+```{r}
+mutate(
+  litters_data,
+  wt_gain = gd18_weight - gd0weight,
+  group = str_to_lower(group),
+  group = str_to_upper(group)
+)
+```
+
+## Arrange
+
+```{r}
+arrange(litters_data, pups_born_alive)
+
+#descending order
+arrange(litters_data, desc(pups_born_alive))
+
+arrange(litters_data, pups_born_alive, gd0_weight)
+
+```
+
+## pipe
+
+
+
+
 
